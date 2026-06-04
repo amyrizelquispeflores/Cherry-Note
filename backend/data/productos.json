@@ -1,0 +1,83 @@
+[
+  {
+    "id": 1,
+    "nombre": "Café Especial",
+    "categoria": "Bebidas",
+    "precio": 25,
+    "stock": 50,
+    "icono": "☕",
+    "activo": true
+  },
+  {
+    "id": 2,
+    "nombre": "Cherry Latte",
+    "categoria": "Bebidas",
+    "precio": 32,
+    "stock": 45,
+    "icono": "🍒",
+    "activo": true
+  },
+  {
+    "id": 3,
+    "nombre": "Capuccino",
+    "categoria": "Bebidas",
+    "precio": 28,
+    "stock": 40,
+    "icono": "☕",
+    "activo": true
+  },
+  {
+    "id": 4,
+    "nombre": "Tarta de Frambuesa",
+    "categoria": "Postres",
+    "precio": 38,
+    "stock": 20,
+    "icono": "🍰",
+    "activo": true
+  },
+  {
+    "id": 5,
+    "nombre": "Brownie Especial",
+    "categoria": "Postres",
+    "precio": 28,
+    "stock": 25,
+    "icono": "🍫",
+    "activo": true
+  },
+  {
+    "id": 6,
+    "nombre": "Cheesecake",
+    "categoria": "Postres",
+    "precio": 35,
+    "stock": 18,
+    "icono": "🍰",
+    "activo": true
+  },
+  {
+    "id": 7,
+    "nombre": "Sándwich Gourmet",
+    "categoria": "Comidas",
+    "precio": 45,
+    "stock": 15,
+    "icono": "🥪",
+    "activo": true
+  },
+  {
+    "id": 8,
+    "nombre": "Ensalada Cherry",
+    "categoria": "Comidas",
+    "precio": 42,
+    "stock": 12,
+    "icono": "🥗",
+    "activo": true
+  },
+  {
+    "id": 9,
+    "nombre": "Wrap de Pollo",
+    "categoria": "Comidas",
+    "precio": 38,
+    "stock": 20,
+    "icono": "🌯",
+    "activo": true
+  }
+]

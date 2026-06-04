@@ -1,0 +1,16 @@
+[
+  {
+    "cliente": "Amy Rizel Quispe Flores",
+    "telefono": "73055626",
+    "direccion": "Para llevar",
+    "productos": [
+      {
+        "nombre": "Café Especial",
+        "cantidad": 1,
+        "precio": 25
+      }
+    ],
+    "total": 25,
+    "id": 1780439640347
+  }
+]
