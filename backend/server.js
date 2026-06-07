@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mysql = require('mysql2');
+const bcrypt = require('bcryptjs');   // para encriptar contraseñas
 
 const app = express();
 const PORT = 5000;
@@ -8,6 +9,7 @@ const PORT = 5000;
 app.use(cors());
 app.use(express.json());
 
+// Conexión a MySQL
 const db = mysql.createConnection({
   host: 'localhost',
   user: 'root',
@@ -22,6 +24,27 @@ db.connect(err => {
   }
   console.log('Conectado a MySQL');
 });
+
+const crearAdmin = async () => {
+  const salt = bcrypt.genSaltSync(10);
+  const hashedPassword = bcrypt.hashSync('admin123', salt);
+  db.query('SELECT id FROM usuarios WHERE email = ?', ['admin@cherrynote.com'], (err, results) => {
+    if (err) return console.error('Error al verificar admin:', err);
+    if (results.length === 0) {
+      db.query(
+        'INSERT INTO usuarios (nombre, email, password, rol, fecha_registro) VALUES (?, ?, ?, ?, ?)',
+        ['Administrador', 'admin@cherrynote.com', hashedPassword, 'admin', new Date().toISOString().slice(0, 10)],
+        (err2) => {
+          if (err2) console.error('Error al crear admin:', err2);
+          else console.log('Usuario administrador creado con contraseña encriptada');
+        }
+      );
+    } else {
+      console.log('El usuario administrador ya existe. No se modificó su contraseña.');
+    }
+  });
+};
+crearAdmin();
 
 app.get('/api/productos', (req, res) => {
   db.query('SELECT * FROM productos WHERE activo = 1', (err, results) => {
@@ -56,12 +79,54 @@ app.put('/api/productos/:id', (req, res) => {
   });
 });
 
-app.post('/api/login', (req, res) => {
+app.post('/api/login', async (req, res) => {
   const { email, password } = req.body;
-  db.query('SELECT id, nombre, email, rol FROM usuarios WHERE email = ? AND password = ?', [email, password], (err, results) => {
+  db.query('SELECT id, nombre, email, rol, password FROM usuarios WHERE email = ?', [email], async (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
     if (results.length === 0) return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
-    res.json({ success: true, user: results[0] });
+
+    const usuario = results[0];
+    const match = await bcrypt.compare(password, usuario.password);
+    if (!match) return res.status(401).json({ success: false, message: 'Credenciales incorrectas' });
+
+    const { password: _, ...userData } = usuario;
+    res.json({ success: true, user: userData });
+  });
+});
+//Validamos la contraseña
+app.post('/api/register', async (req, res) => {
+  const { nombre, email, password } = req.body;
+
+  let strength = 0;
+  if (password.length >= 8) strength++;
+  if (/[a-z]/.test(password)) strength++;
+  if (/[A-Z]/.test(password)) strength++;
+  if (/[0-9]/.test(password)) strength++;
+  if (/[$@#&!]/.test(password)) strength++;
+  const nivel = strength <= 2 ? 'débil' : (strength === 3 ? 'intermedio' : 'fuerte');
+
+  if (nivel === 'débil') {
+    return res.status(400).json({ success: false, message: 'Contraseña demasiado débil. Usa al menos 8 caracteres, mayúsculas, números y símbolos.' });
+  }
+
+  // Aca verifiico si un email ya existe
+  db.query('SELECT id FROM usuarios WHERE email = ?', [email], async (err, results) => {
+    if (err) return res.status(500).json({ error: err.message });
+    if (results.length > 0) {
+      return res.status(400).json({ success: false, message: 'El email ya está registrado' });
+    }
+
+    const salt = bcrypt.genSaltSync(10);
+    const hashedPassword = bcrypt.hashSync(password, salt);
+    const fechaRegistro = new Date().toISOString().slice(0, 10);
+    db.query(
+      'INSERT INTO usuarios (nombre, email, password, rol, fecha_registro) VALUES (?, ?, ?, ?, ?)',
+      [nombre, email, hashedPassword, 'cliente', fechaRegistro],
+      (err2, result) => {
+        if (err2) return res.status(500).json({ error: err2.message });
+        res.json({ success: true, message: 'Usuario registrado correctamente', userId: result.insertId });
+      }
+    );
   });
 });
 
@@ -82,7 +147,7 @@ app.get('/api/pedidos', (req, res) => {
 
 app.post('/api/pedidos', (req, res) => {
   const { cliente, telefono, direccion, productos, total } = req.body;
-const fecha = new Date().toLocaleString('sv-SE').replace(' ', ' ');
+  const fecha = new Date().toLocaleString('sv-SE').replace(' ', ' ');
   db.query('INSERT INTO pedidos (cliente, telefono, direccion, total, estado, fecha) VALUES (?, ?, ?, ?, ?, ?)',
     [cliente, telefono, direccion, total, 'Pendiente', fecha],
     (err, result) => {
@@ -137,6 +202,7 @@ app.put('/api/mesas/:id', (req, res) => {
   });
 });
 
+
 app.get('/api/ventas', (req, res) => {
   db.query('SELECT * FROM ventas', (err, results) => {
     if (err) return res.status(500).json({ error: err.message });
@@ -154,6 +220,7 @@ app.post('/api/ventas', (req, res) => {
       res.json({ success: true });
     });
 });
+
 
 app.get('/api/estadisticas', (req, res) => {
   const queryVentas = 'SELECT SUM(total) as total FROM ventas';
@@ -175,6 +242,8 @@ app.get('/api/estadisticas', (req, res) => {
     });
   }).catch(err => res.status(500).json({ error: err.message }));
 });
+
+
 
 app.listen(PORT, () => {
   console.log(`Backend corriendo en http://localhost:${PORT} con MySQL`);

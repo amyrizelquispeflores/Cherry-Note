@@ -1,8 +1,9 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Link, Navigate } from 'react-router-dom';
-import { FaHome, FaCoffee, FaShoppingCart, FaCalendarAlt, FaSignInAlt, FaChartBar, FaFileAlt, FaUsers, FaBoxes, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
+import { FaHome, FaCoffee, FaShoppingCart, FaCalendarAlt, FaSignInAlt, FaUserPlus, FaChartBar, FaFileAlt, FaUsers, FaBoxes, FaUserCircle, FaSignOutAlt } from 'react-icons/fa';
 import './App.css';
 import LoginPage from './pages/LoginPage';
+import RegisterPage from './pages/RegisterPage';
 import MenuPage from './pages/MenuPage';
 import PedidosPage from './pages/PedidosPage';
 import ReservasPage from './pages/ReservasPage';
@@ -21,7 +22,7 @@ const PrivateRoute = ({ children }) => {
 function HomePage() {
   return (
     <div>
-      {}
+      {/* Hero Section */}
       <div style={{
         background: 'linear-gradient(135deg, #A30000 0%, #7F1734 50%, #4B0082 100%)',
         minHeight: '80vh',
@@ -40,7 +41,7 @@ function HomePage() {
           bottom: '-50px',
           right: '-50px',
           pointerEvents: 'none'
-        }}>🍒</div> {}
+        }}>🍒</div>
         <div style={{ position: 'relative', zIndex: 1, padding: '40px 20px' }}>
           <h1 style={{ fontSize: '64px', marginBottom: '20px', letterSpacing: '2px', fontWeight: 700 }}>Cherry Note</h1>
           <p style={{ fontSize: '22px', marginBottom: '40px', opacity: 0.95, maxWidth: '600px', margin: '0 auto 40px auto' }}>
@@ -65,11 +66,16 @@ function HomePage() {
                 <FaCalendarAlt size={18} /> Reservar Mesa
               </button>
             </Link>
+            <Link to="/register">
+              <button style={{ background: 'white', color: '#A30000', padding: '14px 40px', border: 'none', borderRadius: '40px', fontSize: '16px', fontWeight: 'bold', cursor: 'pointer', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <FaUserPlus size={18} /> Registrarse
+              </button>
+            </Link>
           </div>
         </div>
       </div>
 
-      {}
+      {/* Sección de características */}
       <div style={{ padding: '80px 20px', background: '#FFF9F0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '36px', color: '#A30000', marginBottom: '50px' }}>¿Por qué elegirnos?</h2>
@@ -98,7 +104,7 @@ function HomePage() {
         </div>
       </div>
 
-      {}
+      {/* Productos destacados */}
       <div style={{ padding: '80px 20px', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '36px', color: '#A30000', marginBottom: '50px' }}>Nuestros Especiales</h2>
@@ -118,7 +124,7 @@ function HomePage() {
               <Link to="/pedidos"><button style={{ background: '#A30000', color: 'white', border: 'none', padding: '10px 30px', borderRadius: '25px', cursor: 'pointer', fontWeight: 'bold' }}>Ordenar</button></Link>
             </div>
             <div style={{ background: '#FFF9F0', borderRadius: '16px', padding: '30px', textAlign: 'center', boxShadow: '0 4px 12px rgba(0,0,0,0.1)', transition: 'transform 0.3s' }}>
-              <div style={{ fontSize: 64, marginBottom: 15 }}>🍰</div> {}
+              <div style={{ fontSize: 64, marginBottom: 15 }}>🍰</div>
               <h3 style={{ color: '#A30000' }}>Tarta de Frambuesa</h3>
               <p style={{ color: '#666', margin: '15px 0' }}>Tarta artesanal con frambuesas frescas y crema especial</p>
               <div style={{ fontSize: '28px', fontWeight: 'bold', color: '#D4AF37', marginBottom: '20px' }}>Bs. 38</div>
@@ -128,7 +134,7 @@ function HomePage() {
         </div>
       </div>
 
-      {}
+      {/* Ubicación */}
       <div style={{ padding: '80px 20px', background: '#2F4F4F', color: 'white', marginBottom: '0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', marginBottom: '30px' }}>📍 Visítanos</h2>
@@ -148,7 +154,7 @@ function App() {
   return (
     <Router>
       <div>
-        {}
+        {/* Header con navegación */}
         <div style={{
           background: '#A30000',
           padding: '15px 20px',
@@ -177,6 +183,9 @@ function App() {
             <Link to="/login" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
               <FaSignInAlt size={16} /> Acceder
             </Link>
+            <Link to="/register" style={{ color: 'white', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '6px' }}>
+              <FaUserPlus size={16} /> Registrarse
+            </Link>
           </div>
         </div>
 
@@ -186,6 +195,7 @@ function App() {
           <Route path="/pedidos" element={<PedidosPage />} />
           <Route path="/reservas" element={<ReservasPage />} />
           <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
           <Route path="/admin" element={<PrivateRoute><AdminDashboard /></PrivateRoute>}>
             <Route index element={<AdminDashboardHome />} />
             <Route path="pedidos" element={<AdminPedidos />} />
