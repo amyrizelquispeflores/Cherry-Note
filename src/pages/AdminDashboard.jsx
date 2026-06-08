@@ -35,7 +35,7 @@ const AdminDashboard = () => {
 
   return (
     <div>
-      {/* Header Admin */}
+      
       <div style={{
         background: '#A30000',
         padding: '15px 20px',
@@ -49,8 +49,7 @@ const AdminDashboard = () => {
           <span style={{ fontSize: '28px' }}>🍒</span>
           <h2 style={{ color: 'white', margin: 0, fontSize: 'clamp(18px, 5vw, 24px)' }}>Cherry Note Admin</h2>
         </div>
-        
-        {/* Botón hamburguesa para móvil */}
+    
         <div 
           onClick={() => setMenuOpen(!menuOpen)}
           style={{
@@ -84,7 +83,6 @@ const AdminDashboard = () => {
         </ul>
       </div>
 
-      {/* Contenido dinámico */}
       <div style={{ padding: '20px', background: '#FFF9F0', minHeight: 'calc(100vh - 70px)' }}>
         <Outlet />
       </div>

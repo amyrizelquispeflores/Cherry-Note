@@ -26,7 +26,6 @@ const MenuPage = () => {
       <h1 style={{ color: '#A30000', textAlign: 'center', marginBottom: '10px' }}>Nuestro Menú</h1>
       <p style={{ textAlign: 'center', color: '#666', marginBottom: '40px' }}>Descubre nuestros sabores exclusivos</p>
 
-      {/* Filtros */}
       <div style={{ display: 'flex', justifyContent: 'center', gap: '15px', marginBottom: '40px', flexWrap: 'wrap' }}>
         {categorias.map(cat => (
           <button

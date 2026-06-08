@@ -8,15 +8,12 @@ const AdminDashboardHome = () => {
   useEffect(() => {
     const cargarDatos = async () => {
       try {
-        // Estadísticas generales (totales)
         const resStats = await fetch('http://localhost:5000/api/estadisticas');
         const dataStats = await resStats.json();
         setStats(dataStats);
-        // Ventas para el gráfico
         const resVentas = await fetch('http://localhost:5000/api/ventas');
         const dataVentas = await resVentas.json();
         setVentas(dataVentas);
-        // Pedidos para la tabla reciente
         const resPedidos = await fetch('http://localhost:5000/api/pedidos');
         const dataPedidos = await resPedidos.json();
         setPedidos(dataPedidos.slice(0, 5));
@@ -27,12 +24,11 @@ const AdminDashboardHome = () => {
     cargarDatos();
   }, []);
 
-  // Procesar ventas mensuales para el gráfico (últimos 6 meses)
   const meses = ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun'];
   const ventasPorMes = meses.map(m => 0);
   ventas.forEach(v => {
     const fecha = new Date(v.fecha);
-    const mesIndex = fecha.getMonth(); // 0=Ene, 1=Feb, etc.
+    const mesIndex = fecha.getMonth(); 
     if (mesIndex >= 0 && mesIndex < 6) {
       ventasPorMes[mesIndex] += parseFloat(v.total);
     }
@@ -69,7 +65,6 @@ const AdminDashboardHome = () => {
         </div>
       </div>
 
-      {/* Gráfico de barras */}
       <div style={{
         background: 'white',
         borderRadius: '12px',
@@ -77,7 +72,7 @@ const AdminDashboardHome = () => {
         marginBottom: '30px',
         boxShadow: '0 2px 8px rgba(0,0,0,0.1)'
       }}>
-        <h3 style={{ color: '#A30000', marginBottom: '20px' }}>📈 Ventas por Mes (Bs.)</h3>
+        <h3 style={{ color: '#A30000', marginBottom: '20px' }}> Ventas por Mes (Bs.)</h3>
         <div style={{ display: 'flex', gap: '15px', alignItems: 'flex-end', height: '250px' }}>
           {meses.map((mes, idx) => (
             <div key={mes} style={{ flex: 1, textAlign: 'center' }}>
@@ -95,7 +90,6 @@ const AdminDashboardHome = () => {
         </div>
       </div>
 
-      {/* Tabla de pedidos recientes */}
       <div style={{
         background: 'white',
         borderRadius: '12px',

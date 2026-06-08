@@ -47,12 +47,11 @@ const handleLogin = async (e) => {
   localStorage.setItem('token', 'token-simulado');
   localStorage.setItem('user', JSON.stringify(datos.user));
 
-  // === REGISTRAR LOG DE INGRESO ===
   const logData = {
     usuario: formData.email,
     evento: 'ingreso',
     browser: navigator.userAgent,
-    ip: '127.0.0.1',  // En un entorno real se obtendría del backend
+    ip: '127.0.0.1', 
     fecha: new Date().toLocaleString()
   };
   const logs = JSON.parse(localStorage.getItem('accessLogs') || '[]');

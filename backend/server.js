@@ -93,6 +93,7 @@ app.post('/api/login', async (req, res) => {
     res.json({ success: true, user: userData });
   });
 });
+
 //Validamos la contraseña
 app.post('/api/register', async (req, res) => {
   const { nombre, email, password } = req.body;
