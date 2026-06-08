@@ -14,10 +14,24 @@ const AdminDashboard = () => {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    localStorage.removeItem('user');
-    navigate('/');
-  };
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (user.email) {
+    const logData = {
+      usuario: user.email,
+      evento: 'salida',
+      browser: navigator.userAgent,
+      ip: '127.0.0.1',
+      fecha: new Date().toLocaleString()
+    };
+    const logs = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+    logs.push(logData);
+    localStorage.setItem('accessLogs', JSON.stringify(logs));
+  }
+
+  localStorage.removeItem('token');
+  localStorage.removeItem('user');
+  navigate('/');
+};
 
   return (
     <div>
@@ -64,12 +78,13 @@ const AdminDashboard = () => {
           <li><Link to="/admin/reservas" style={{ color: 'white', textDecoration: 'none' }}>Reservas</Link></li>
           <li><Link to="/admin/productos" style={{ color: 'white', textDecoration: 'none' }}>Productos</Link></li>
           <li><Link to="/admin/reportes" style={{ color: 'white', textDecoration: 'none' }}>Reportes</Link></li>
+          <li><Link to="/admin/logs" style={{ color: 'white', textDecoration: 'none' }}>📋 Logs</Link></li>
           <li><span style={{ color: 'white', background: 'rgba(255,255,255,0.2)', padding: '5px 12px', borderRadius: '20px' }}> {user?.nombre || user?.email || 'Admin'}</span></li>
           <li><button onClick={handleLogout} style={{ background: 'rgba(255,255,255,0.2)', color: 'white', border: 'none', padding: '6px 15px', borderRadius: '20px', cursor: 'pointer' }}>Cerrar Sesión</button></li>
         </ul>
       </div>
 
-      {}
+      {/* Contenido dinámico */}
       <div style={{ padding: '20px', background: '#FFF9F0', minHeight: 'calc(100vh - 70px)' }}>
         <Outlet />
       </div>

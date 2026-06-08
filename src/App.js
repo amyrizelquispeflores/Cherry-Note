@@ -13,16 +13,21 @@ import AdminPedidos from './pages/AdminPedidos';
 import AdminReservas from './pages/AdminReservas';
 import AdminProductos from './pages/AdminProductos';
 import AdminReportes from './pages/AdminReportes';
+import AdminLogs from './pages/AdminLogs';
 
 const PrivateRoute = ({ children }) => {
   const token = localStorage.getItem('token');
-  return token ? children : <Navigate to="/login" />;
+  const user = JSON.parse(localStorage.getItem('user') || '{}');
+  if (!token || user.rol !== 'admin') {
+    return <Navigate to="/login" />;
+  }
+  return children;
 };
 
 function HomePage() {
   return (
     <div>
-      {/* Hero Section */}
+      {}
       <div style={{
         background: 'linear-gradient(135deg, #A30000 0%, #7F1734 50%, #4B0082 100%)',
         minHeight: '80vh',
@@ -75,7 +80,7 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Sección de características */}
+      {}
       <div style={{ padding: '80px 20px', background: '#FFF9F0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '36px', color: '#A30000', marginBottom: '50px' }}>¿Por qué elegirnos?</h2>
@@ -104,7 +109,7 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Productos destacados */}
+      {}
       <div style={{ padding: '80px 20px', background: 'white' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto' }}>
           <h2 style={{ textAlign: 'center', fontSize: '36px', color: '#A30000', marginBottom: '50px' }}>Nuestros Especiales</h2>
@@ -134,7 +139,7 @@ function HomePage() {
         </div>
       </div>
 
-      {/* Ubicación */}
+      {}
       <div style={{ padding: '80px 20px', background: '#2F4F4F', color: 'white', marginBottom: '0' }}>
         <div style={{ maxWidth: '1200px', margin: '0 auto', textAlign: 'center' }}>
           <h2 style={{ fontSize: '36px', marginBottom: '30px' }}>📍 Visítanos</h2>
@@ -154,7 +159,7 @@ function App() {
   return (
     <Router>
       <div>
-        {/* Header con navegación */}
+        {}
         <div style={{
           background: '#A30000',
           padding: '15px 20px',
@@ -202,6 +207,7 @@ function App() {
             <Route path="reservas" element={<AdminReservas />} />
             <Route path="productos" element={<AdminProductos />} />
             <Route path="reportes" element={<AdminReportes />} />
+            <Route path="logs" element={<AdminLogs />} />
           </Route>
         </Routes>
 

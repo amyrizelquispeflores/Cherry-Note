@@ -44,10 +44,27 @@ const handleLogin = async (e) => {
     const datos = await respuesta.json();
     
     if (datos.success) {
-      localStorage.setItem('token', 'token-simulado');
-      localStorage.setItem('user', JSON.stringify(datos.user));
-      navigate('/admin');
-    } else {
+  localStorage.setItem('token', 'token-simulado');
+  localStorage.setItem('user', JSON.stringify(datos.user));
+
+  // === REGISTRAR LOG DE INGRESO ===
+  const logData = {
+    usuario: formData.email,
+    evento: 'ingreso',
+    browser: navigator.userAgent,
+    ip: '127.0.0.1',  // En un entorno real se obtendría del backend
+    fecha: new Date().toLocaleString()
+  };
+  const logs = JSON.parse(localStorage.getItem('accessLogs') || '[]');
+  logs.push(logData);
+  localStorage.setItem('accessLogs', JSON.stringify(logs));
+  
+  if (datos.user.rol === 'admin') {
+    navigate('/admin');
+  } else {
+    navigate('/');
+  }
+} else {
       setError(datos.message || 'Credenciales incorrectas');
     }
   } catch (error) {
